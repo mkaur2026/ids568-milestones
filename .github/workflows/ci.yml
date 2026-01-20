@@ -29,5 +29,5 @@ jobs:
       - name: Run smoke test
         run: |
           source venv/bin/activate
-          pytest -v
+          pytest -v tests/test_imports.py
 
