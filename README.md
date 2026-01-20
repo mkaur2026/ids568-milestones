@@ -10,8 +10,8 @@
    -Git
 
 2. Clone the repository
-   git clone [GITHUB LINK]
-   cd [repository title]
+   git clone https://github.com/mkaur2026/ids568-milestones.git
+   cd ids568-milestones
 
 3. Create & activate  virtual environment
    python3 -m venv venv
@@ -33,14 +33,13 @@
           assert pandas.__version__== "2.1.0"
    
    pytest -v     #runs the smoke test locally/you should see a PASSED output#
-
-5. Set up GitHub Actions CI
-   mkdir github/workflows
-   touch github/workflows/ci.yml
-   insert workflow code into file
+6. Set up GitHub Actions CI
+   mkdir -p .github/workflows
+   touch .github/workflows/ci.yml
+   insert workflow code into ci.yml
 
    #push to GitHub
-   git add github/workflows/ci.yml
+   git add .github/workflows/ci.yml
    git commit -m "title"
    git push origin main
    
