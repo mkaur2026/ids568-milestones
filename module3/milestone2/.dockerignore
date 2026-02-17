@@ -1,0 +1,26 @@
+# Git
+.git/
+.gitignore
+
+# Python cache / venv
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Test / coverage cache
+.pytest_cache/
+htmlcov/
+.coverage
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Docs (keep README)
+*.md
+!README.md
+!RUNBOOK.md
+
