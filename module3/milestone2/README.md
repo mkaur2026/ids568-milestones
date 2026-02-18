@@ -1,81 +1,50 @@
-# Milestone 2 — FastAPI Service with Docker & CI
+# Milestone 2 — FastAPI Service with Docker & CI/CD
 
 ## Overview
-This milestone builds a containerized FastAPI service with:
-
+This project is a containerized FastAPI service with:
 - Health check endpoint
 - Prediction endpoint
-- Unit testing with pytest
-- Docker multi-stage build
-- GitHub Actions CI
-- Docker image build on tag
+- Unit tests (pytest)
+- Multi-stage Docker build
+- GitHub Actions workflow that builds/tests/pushes on tags
 
----
+## CI Status
+![Build](https://github.com/mkaur2026/ids568-milestones/actions/workflows/build.yml/badge.svg)
 
 ## Endpoints
 
 ### GET /healthz
-Returns service health status.
-
 Response:
-{
-  "status": "ok"
-}
-
----
-
-### POST /predict
+```json
+{"status":"ok"}
+POST /predict
 Request:
-{
-  "number": 5
-}
-
+{"number":5}
 Response:
-{
-  "prediction": 10
-}
-
-If number < 0 → returns 400 error.
-
----
-
-## Run Locally
-
-Create virtual environment:
-
+{"prediction":10}
+If number < 0 → returns 400.
+Run Locally (no Docker)
+cd module3/milestone2
 python3.11 -m venv .venv
 source .venv/bin/activate
-
-Install dependencies:
-
 pip install -r requirements.txt
-
-Run app:
-
 uvicorn app.main:app --reload
-
----
-
-## Run Tests
-
+Run Tests
+cd module3/milestone2
 pytest -v
-
----
-
-## Build Docker Image
-
+Build + Run with Docker (local)
+cd module3/milestone2
 docker build -t milestone2-service:local .
-
-Run container:
-
-docker run -p 8000:8000 milestone2-service:local
-
----
-
-## CI/CD
-
-GitHub Actions runs:
-- pytest
-- Docker build
-- Docker push on tag (v1.0.0)
-
+docker run --rm -p 8000:8000 milestone2-service:local
+Test:
+curl http://localhost:8000/healthz
+curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d '{"number":5}'
+Pull + Run from Artifact Registry (course registry)
+Image reference:
+us-central1-docker.pkg.dev/milestone1-mlops/milestone1-repo/milestone2-service:<TAG>
+Example:
+docker pull us-central1-docker.pkg.dev/milestone1-mlops/milestone1-repo/milestone2-service:v1.0.1
+docker run --rm -p 8000:8000 us-central1-docker.pkg.dev/milestone1-mlops/milestone1-repo/milestone2-service:v1.0.1
+Versioning
+Images are published using semantic version tags (vX.Y.Z).
+Final submission tag: m2-submission.
