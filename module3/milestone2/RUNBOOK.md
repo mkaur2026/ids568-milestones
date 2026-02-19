@@ -1,52 +1,108 @@
 # RUNBOOK — Milestone 2 Service
 
-## Service Description
-FastAPI microservice with health and prediction endpoints.
+## 1. Service Description
+
+This project is a containerized FastAPI microservice with:
+
+- GET /healthz → health check endpoint
+- POST /predict → prediction endpoint (doubles input number)
 
 ---
 
-## Health Check
+## 2. Dependency Pinning Strategy
 
-curl http://localhost:8000/healthz
+All dependencies are pinned in requirements.txt using exact versions (example: fastapi==0.110.0).
 
-Expected:
-{"status":"ok"}
+Pinning ensures:
+- Reproducible builds
+- No unexpected dependency updates
+- Deterministic Docker image creation
 
----
-
-## Prediction Test
-
-curl -X POST http://localhost:8000/predict \
--H "Content-Type: application/json" \
--d '{"number":5}'
-
-Expected:
-{"prediction":10}
+Dependencies are installed in the builder stage of the multi-stage Dockerfile.
 
 ---
 
-## Common Issues
+## 3. Image Optimization
 
-### 1. ModuleNotFoundError: app
-Run pytest from inside milestone2 directory.
+This project uses a multi-stage Docker build.
 
-### 2. Docker daemon not running
+### Optimization Techniques:
+- Separate builder stage for dependency installation
+- Minimal runtime stage using python:3.11-slim
+- Only required files copied into runtime image
+- .dockerignore excludes unnecessary files
+- Container runs as non-root user
+
+### Final Image Size
+
+Measured using:
+
+docker images milestone2-service:local
+
+Optimized image size:
+
+169 MB
+
+---
+
+## 4. Security Considerations
+
+- No hardcoded credentials in repository
+- Registry authentication handled via GitHub Secrets
+- Minimal slim base image
+- Multi-stage build removes build tools from runtime image
+- Non-root container user (appuser)
+
+---
+
+## 5. CI/CD Workflow
+
+GitHub Actions workflow performs:
+
+1. Runs pytest
+2. Builds Docker image
+3. Authenticates to Artifact Registry
+4. Pushes image only if tests pass
+5. Tags image using semantic versioning
+
+Pipeline triggers:
+- On push to main
+- On semantic version tags (vX.Y.Z)
+
+---
+
+## 6. Versioning Strategy
+
+Semantic versioning is used:
+
+vMAJOR.MINOR.PATCH
+
+Examples:
+- v1.0.0
+- v1.0.1
+
+Final submission tag:
+
+m2-submission
+
+---
+
+## 7. Troubleshooting
+
+### ModuleNotFoundError: app
+Run pytest from inside module3/milestone2 directory.
+
+### Docker daemon not running
 Start Docker Desktop.
 
-### 3. Port already in use
-Kill existing container:
+### Port already in use
+Check containers:
 docker ps
+
+Stop container:
 docker stop <container_id>
 
----
+### Authentication error when pushing image
+Verify GitHub Secrets configuration.
 
-## Redeploy
-
-Rebuild image:
-
-docker build -t milestone2-service:local .
-
-Re-run container:
-
-docker run -p 8000:8000 milestone2-service:local
 
