@@ -24,15 +24,11 @@ This project implements a containerized FastAPI microservice with:
 ### GET /healthz
 
 Response:
-
-```json
 {"status":"ok"}
 
 POST /predict
-
 Request:
 {"number":5}
-
 Response:
 {"prediction":10}
 
