@@ -21,12 +21,11 @@ This project implements a containerized FastAPI microservice with:
 
 ## Endpoints
 
-### GET /healthz
-
+GET /healthz
 Response:
 {"status":"ok"}
 
-POST /predict
+## POST /predict
 Request:
 {"number":5}
 Response:
@@ -34,43 +33,40 @@ Response:
 
 If number < 0, the service returns HTTP 400.
 
-Run Locally (Without Docker)
+## Run Locally (Without Docker)
 cd module3/milestone2
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 
-Test endpoints:
-
+# Test endpoints:
 curl http://localhost:8000/healthz
 curl -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" \
   -d '{"number":5}'
 
-Run Tests
-
+## Run Tests
 cd module3/milestone2
 pytest -v
 
-Build and Run with Docker
-
+## Build and Run with Docker
 cd module3/milestone2
 docker build -t milestone2-service:local .
 docker run --rm -p 8000:8000 milestone2-service:local
 
-Pull From Artifact Registry
+## Pull From Artifact Registry
 
 Image format:
-
 us-central1-docker.pkg.dev/milestone1-mlops/milestone1-repo/milestone2-service:<TAG>
+
 Example:
 docker pull us-central1-docker.pkg.dev/milestone1-mlops/milestone1-repo/milestone2-service:v1.0.1
 
 docker run --rm -p 8000:8000 \
   us-central1-docker.pkg.dev/milestone1-mlops/milestone1-repo/milestone2-service:v1.0.1
-Versioning Strategy
 
+## Versioning Strategy
 Docker images use semantic versioning:
 vMAJOR.MINOR.PATCH
 
