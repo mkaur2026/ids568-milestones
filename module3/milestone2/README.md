@@ -72,3 +72,12 @@ vMAJOR.MINOR.PATCH
 
 Final submission tag:
 m2-submission
+
+---
+
+## Registry Verification
+
+Docker image successfully pushed to Google Artifact Registry using semantic version tags.
+
+![Registry Verification](Artifact%20Registry.png)
+
