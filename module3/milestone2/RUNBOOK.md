@@ -24,24 +24,29 @@ Dependencies are installed in the builder stage of the multi-stage Dockerfile.
 
 ## 3. Image Optimization
 
-This project uses a multi-stage Docker build.
+This project uses a multi-stage Docker build to reduce image size and improve security.
 
-### Optimization Techniques:
-- Separate builder stage for dependency installation
-- Minimal runtime stage using python:3.11-slim
-- Only required files copied into runtime image
-- .dockerignore excludes unnecessary files
-- Container runs as non-root user
+### Optimization Techniques
 
-### Final Image Size
+- Separate **builder stage** for installing dependencies
+- Minimal runtime stage using `python:3.11-slim`
+- Only required application files copied into runtime image
+- `.dockerignore` excludes unnecessary files
+- Container runs as a non-root user (`appuser`)
+- No build tools included in final image
 
-Measured using:
+### Image Size Measurement
+
+Image size measured using:
 
 docker images milestone2-service:local
 
-Optimized image size:
+Without multi-stage optimization (single-stage build with full Python image), image size would typically exceed 400–500MB.
+Optimized multi-stage image size:
 
 169 MB
+
+This demonstrates significant reduction in size and attack surface.
 
 ---
 
